@@ -26,8 +26,8 @@ BINDIR := bin
 
 ########### OBJECTS ##################################
 TARGET := $(BINDIR)/$(NAME)
-SRCS += $(wildcard src/*.cpp)
-OBJS += $(SRCS:.cpp=.o)
+SRCS := $(shell find $(SRCDIR) -name *.cpp)
+OBJS := $(SRCS:.cpp=.o)
 
 ########### AUX TARGETS ##############################
 %.o: %.cpp
@@ -40,6 +40,9 @@ OBJS += $(SRCS:.cpp=.o)
 ########### TARGETS ##################################
 
 all: .comp
+
+check:
+	@echo $(SRCS)
 
 clean:
 	rm -rf *.o $(NAME)
