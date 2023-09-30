@@ -1,9 +1,9 @@
 #include <stdexcept>
 
-#include <sgc/PDFReader.h>
-
 #include <poppler/cpp/poppler-document.h>
 #include <poppler/cpp/poppler-page.h>
+
+#include <sgc/PDFReader.h>
 
 sgc::PDFReader::PDFReader(const std::string& path) {
     document = poppler::document::load_from_file(path);
@@ -24,6 +24,8 @@ std::string sgc::PDFReader::getPDFContent() const {
         poppler::page* page = document->create_page(pageNum);
         std::string text = page->text().to_latin1().c_str();
         content += text;
+
+        delete page;
     }
 
     return content;
