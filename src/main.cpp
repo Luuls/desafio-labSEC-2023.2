@@ -44,36 +44,6 @@ int main(int argc, char** argv) {
         std::cin >> email;
         std::cin.ignore(1, '\n');
 
-        std::cout << "Senha: ";
-
-        std::string password;
-        struct termios oldt, newt;
-        tcgetattr(0, &oldt); // Salva as configurações do terminal
-        newt = oldt;
-        newt.c_lflag &= ~ECHO; // Desabilita a exibição dos caracteres
-        tcsetattr(0, TCSANOW, &newt); // Aplica as novas configurações do terminal
-
-        while (1) {
-            char ch = getchar();
-            if (ch == '\n') // Se Enter for pressionado, encerra o loop
-                break;
-
-            if (ch == 127) { // Se Backspace for pressionado
-                if (password.length() > 0) {
-                    password.erase(password.length() - 1);
-                }
-            }
-
-            else {
-                password += ch;
-            }
-        }
-
-        tcsetattr(0, TCSANOW, &oldt); // Restaura as configurações originais do terminal
-
-        std::cout << '\n';
-        std::cout << "senha digitada: " << password << '\n';
-
         operators.push_back(sgc::Operator(name, cpf, email));
     }
 
