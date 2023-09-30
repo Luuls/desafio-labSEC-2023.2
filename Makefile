@@ -14,36 +14,50 @@ LIBCRYPTOSEC_INCLUDEDIR ?= $(LIBCRYPTOSEC_PREFIX)/include/libcryptosec/
 LIBP11_PREFIX ?= /opt/libp11/
 LIBP11_INCLUDEDIR ?= $(LIBP11_PREFIX)/include/
 
+POPPLER_INCLUDEDIR1 := /usr/include/poppler/cpp/
+POPPLER_INCLUDEDIR2 := /usr/include/poppler/
+POPPLER_LIBFLAGS := -lpoppler-cpp -lpoppler
+
 ############ DEPENDENCIES ############################
-LIBS = $(LIBCRYPTOSEC) -L$(OPENSSL_LIBDIR) -Wl,-rpath,$(OPENSSL_LIBDIR) -lcrypto -pthread
-INCLUDES = -I$(OPENSSL_INCLUDEDIR) -I$(LIBCRYPTOSEC_INCLUDEDIR) -I$(LIBP11_INCLUDEDIR)
+LIBS = $(LIBCRYPTOSEC) -L$(OPENSSL_LIBDIR) -Wl,-rpath,$(OPENSSL_LIBDIR) -lcrypto -pthread $(POPPLER_LIBFLAGS)
+DEPS_INCLUDES = -I$(OPENSSL_INCLUDEDIR) -I$(LIBCRYPTOSEC_INCLUDEDIR) -I$(LIBP11_INCLUDEDIR) -I$(POPPLER_INCLUDEDIR1) -I$(POPPLER_INCLUDEDIR2)
 
 ########### PROJECT DIRS #########################
 SRCDIR := src
-INCLUDEDIR := include
+INCLUDEDIR := ./include
 BUILDDIR := build
 BINDIR := bin
 
 ########### OBJECTS ##################################
 TARGET := $(BINDIR)/$(NAME)
 SRCS := $(shell find $(SRCDIR) -name *.cpp)
-OBJS := $(SRCS:.cpp=.o)
+HDRS := $(shell find $(INCLUDEDIR) -name *.h)
+OBJS := $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SRCS))
 
 ########### AUX TARGETS ##############################
-%.o: %.cpp
-	$(CC) $(CPPFLAGS) $(DEFS) $(INCLUDES) -O0 -Wall -c -o "$@" "$<"
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp $(HDRS) | $(BUILDDIR)
+	@echo Compiling $<
+	$(CC) $(CPPFLAGS) $(DEFS) $(DEPS_INCLUDES) -I$(INCLUDEDIR) -O0 -Wall -c -o "$(BUILDDIR)/$(notdir $@)" "$<"
 
-.comp: $(OBJS)
-	$(CC) $(CPPFLAGS) $(DEFS) -o $(NAME) $(OBJS) $(LIBS)
+$(TARGET): $(OBJS) | $(BINDIR)
+	@echo Linking $@
+	$(CC) $(CPPFLAGS) $(DEFS) -o $(TARGET) $(addprefix $(BUILDDIR)/,$(notdir $(OBJS))) $(LIBS)
 	@echo 'Build complete!'
 
-########### TARGETS ##################################
+$(BUILDDIR):
+	@mkdir -p $(BUILDDIR)
 
-all: .comp
+$(BINDIR):
+	@mkdir -p $(BINDIR)
+
+########### TARGETS ##################################
+all: $(TARGET)
 
 check:
-	@echo $(SRCS)
+	@echo $(OBJS)
 
 clean:
-	rm -rf *.o $(NAME)
+	rm -rf $(BUILDDIR) $(BINDIR)
+
+.PHONY: all check clean
 

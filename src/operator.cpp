@@ -1,4 +1,4 @@
-#include "operator.h"
+#include <sgc/operator.h>
 
 sgc::Operator::Operator(
     const std::string& name,
