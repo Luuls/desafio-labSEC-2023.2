@@ -53,11 +53,14 @@ $(BINDIR):
 ########### TARGETS ##################################
 all: $(TARGET)
 
+run: 
+	@$(TARGET) DOCUMENTO-TESTE.pdf
+
 check:
 	@echo $(OBJS)
 
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
-.PHONY: all check clean
+.PHONY: all check clean run
 

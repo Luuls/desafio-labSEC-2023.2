@@ -18,7 +18,9 @@ public:
 
     std::string getEmail() const;
     void setEmail(const std::string& newEmail);
-    
+
+    void printData() const;
+
 private:
     std::string name;
     std::string cpf;

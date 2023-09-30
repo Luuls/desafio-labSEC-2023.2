@@ -1,8 +1,9 @@
 #include <iostream>
-#include <poppler/cpp/poppler-page.h>
-#include <poppler/cpp/poppler-document.h>
+#include <stdexcept>
+#include <termios.h>
 
 #include <sgc/operator.h>
+#include <sgc/PDFReader.h>
 
 #include <libcryptosec/certificate/Certificate.h>
 #include <libcryptosec/RSAKeyPair.h>
@@ -21,22 +22,79 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    const std::string pdfFilePath = argv[1];
+    std::cout << "Quantos operadores irão participar desta decisão?\n";
+    int numOperators;
+    std::cin >> numOperators;
+    std::cin.ignore(1, '\n');
+    std::cout << '\n';
 
-    // Abrir o documento PDF
-    poppler::document* pdfDocument = poppler::document::load_from_file(pdfFilePath);
-    
-    if (!pdfDocument) {
-        std::cerr << "Erro ao abrir o arquivo PDF." << std::endl;
-        return 1;
+    std::vector<sgc::Operator> operators;
+    for (int i = 0; i < numOperators; i++) {
+        std::cout << "Operador número " << i + 1 << ", insira seus dados\n";
+        std::cout << "Nome: ";
+        std::string name;
+        getline(cin, name);
+
+        std::cout << "CPF (somente números): ";
+        std::string cpf;
+        std::cin >> cpf;
+
+        std::cout << "E-mail: ";
+        std::string email;
+        std::cin >> email;
+        std::cin.ignore(1, '\n');
+
+        std::cout << "Senha: ";
+
+        std::string password;
+        struct termios oldt, newt;
+        tcgetattr(0, &oldt); // Salva as configurações do terminal
+        newt = oldt;
+        newt.c_lflag &= ~ECHO; // Desabilita a exibição dos caracteres
+        tcsetattr(0, TCSANOW, &newt); // Aplica as novas configurações do terminal
+
+        while (1) {
+            char ch = getchar();
+            if (ch == '\n') // Se Enter for pressionado, encerra o loop
+                break;
+
+            if (ch == 127) { // Se Backspace for pressionado
+                if (password.length() > 0) {
+                    password.erase(password.length() - 1);
+                }
+            }
+
+            else {
+                password += ch;
+            }
+        }
+
+        tcsetattr(0, TCSANOW, &oldt); // Restaura as configurações originais do terminal
+
+        std::cout << '\n';
+        std::cout << "senha digitada: " << password << '\n';
+
+        operators.push_back(sgc::Operator(name, cpf, email));
     }
 
-    // Extrair texto de cada página do PDF
-    const int numPages = pdfDocument->pages();
-    for (int pageNum = 0; pageNum < numPages; ++pageNum) {
-        poppler::page* page = pdfDocument->create_page(pageNum);
-        std::string text = page->text().to_latin1();
-        std::cout << text << '\n';
+    std::cout << "Operadores cadastrados:\n";
+    for (int i = 0; i < numOperators; i++) {
+        std::cout << "Operador número " << i + 1 << '\n';
+        operators[i].printData();
+        std::cout << '\n';
+    }
+    
+    const std::string pdfFilePath = argv[1];
+
+    try {
+        sgc::PDFReader pdfReader(pdfFilePath);
+        std::string pdfContent = pdfReader.getPDFContent();
+        std::cout << pdfContent << '\n';
+    }
+
+    catch (const std::runtime_error& e) {
+        std::cerr << e.what() << '\n';
+        return 1;
     }
 
     // RSAKeyPair pair(2048);

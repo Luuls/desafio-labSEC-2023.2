@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <sgc/operator.h>
 
 sgc::Operator::Operator(
@@ -14,3 +16,10 @@ void sgc::Operator::setCpf(const std::string& newCpf) { cpf = newCpf; }
 
 std::string sgc::Operator::getEmail() const { return email; }
 void sgc::Operator::setEmail(const std::string& newEmail) { email = newEmail; }
+
+//@brief Print operator's data
+void sgc::Operator::printData() const{
+    std::cout << "Nome: " << name << '\n';
+    std::cout << "CPF: " << cpf << '\n';
+    std::cout << "E-mail: " << email << '\n';
+}
