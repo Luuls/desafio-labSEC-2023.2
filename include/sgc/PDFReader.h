@@ -1,12 +1,12 @@
 #include <string>
 
-#include <sgc/file/fileReader.h>
+#include <sgc/file/iFileReader.h>
 
 #include <poppler/cpp/poppler-document.h>
 
 namespace sgc {
 
-class PDFReader : public sgc::FileReader {
+class PDFReader : public IFileReader {
 public:
     PDFReader(const std::string& path);
     virtual ~PDFReader();

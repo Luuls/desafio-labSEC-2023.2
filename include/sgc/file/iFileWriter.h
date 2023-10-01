@@ -2,11 +2,11 @@
 
 namespace sgc {
 
-class FileWriter {
+class IFileWriter {
 public:
     virtual void writeFile(const std::string& content) const = 0;
 
-    virtual ~FileWriter() {};
+    virtual ~IFileWriter() {};
 };
 
 }

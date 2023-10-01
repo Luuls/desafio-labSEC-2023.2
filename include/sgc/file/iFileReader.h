@@ -2,11 +2,11 @@
 
 namespace sgc {
 
-class FileReader {
+class IFileReader {
 public:
     virtual std::string getFileContent() const = 0;
 
-    virtual ~FileReader() {};
+    virtual ~IFileReader() {};
 };
 
 }
