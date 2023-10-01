@@ -1,4 +1,6 @@
 #include <iostream>
+#include <istream>
+#include <ostream>
 #include <stdexcept>
 #include <termios.h>
 
@@ -7,7 +9,10 @@
 
 #include <libcryptosec/certificate/Certificate.h>
 #include <libcryptosec/RSAKeyPair.h>
-#include <libcryptosec/SymmetricCipher.h>
+#include <libcryptosec/MessageDigest.h>
+#include <libcryptosec/Base64.h>
+#include <libcryptosec/certificate/Certificate.h>
+#include <libcryptosec/certificate/CertificateRequest.h>
 
 int main(int argc, char** argv) {
     std::string usage = "Uso: " + std::string(argv[0]) + " <caminho do PDF>";
@@ -44,6 +49,10 @@ int main(int argc, char** argv) {
         std::cin >> email;
         std::cin.ignore(1, '\n');
 
+        // generate certificate and key pair
+        RSAKeyPair pair(2048);
+        // CertificateRequest request(pair.getPublicKey()->getPemEncoded());
+        // request.getPublicKey()->getPemEncoded();
         operators.push_back(sgc::Operator(name, cpf, email));
     }
 
@@ -53,12 +62,12 @@ int main(int argc, char** argv) {
         operators[i].printData();
         std::cout << '\n';
     }
-    
+
     const std::string pdfFilePath = argv[1];
 
     try {
         sgc::PDFReader pdfReader(pdfFilePath);
-        std::string pdfContent = pdfReader.getPDFContent();
+        std::string pdfContent = pdfReader.getFileContent();
         std::cout << pdfContent << '\n';
     }
 
@@ -67,8 +76,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // RSAKeyPair pair(2048);
-    // std::cout << pair.getPrivateKey()->getPemEncoded() << '\n';
+    RSAKeyPair pair(2048);
+    std::string pemPrivateKey = pair.getPrivateKey()->getPemEncoded();
+    std::cout << pemPrivateKey << '\n';
 
     return 0;
 }

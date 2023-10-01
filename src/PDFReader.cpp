@@ -16,7 +16,7 @@ sgc::PDFReader::~PDFReader() {
     delete document;
 }
 
-std::string sgc::PDFReader::getPDFContent() const {
+std::string sgc::PDFReader::getFileContent() const {
     // Extrair texto de cada página do PDF
     const int numPages = document->pages();
     std::string content;
