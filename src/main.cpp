@@ -7,6 +7,7 @@
 
 #include <sgc/operator.h>
 #include <sgc/PDFReader.h>
+#include <sgc/cryptoManager.h>
 #include <sgc/pemManipulator.h>
 
 #include <libcryptosec/certificate/CertificateRequest.h>
@@ -101,5 +102,12 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::string cpf0 = "12345678910";
+    sgc::CryptoManager manager(cpf0);
+    PrivateKey* privateKey = manager.getPrivateKey();
+    std::cout << privateKey->getPemEncoded() << '\n';
+    delete privateKey;
+
+    
     return 0;
 }
