@@ -11,7 +11,7 @@ OPENSSL_INCLUDEDIR ?= $(OPENSSL_PREFIX)/include
 LIBCRYPTOSEC_PREFIX ?= /usr/local
 LIBCRYPTOSEC ?= $(LIBCRYPTOSEC_PREFIX)/lib64/libcryptosec.so
 LIBCRYPTOSEC_INCLUDEDIR ?= $(LIBCRYPTOSEC_PREFIX)/include/libcryptosec/
-LIBP11_PREFIX ?= /opt/libp11/
+LIBP11_PREFIX ?= /opt/libp11
 LIBP11_INCLUDEDIR ?= $(LIBP11_PREFIX)/include/
 
 POPPLER_INCLUDEDIR1 := /usr/include/poppler/cpp/
@@ -61,6 +61,9 @@ check:
 
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
+
+cldata:
+	rm -rf ./data
 
 .PHONY: all check clean run
 
