@@ -6,11 +6,21 @@ namespace sgc {
 
 class Operator {
 public:
+    // Operator(
+    //     const std::string& name,
+    //     const std::string& id,
+    //     const std::string& email
+    // );
+
     Operator(
         const std::string& name,
         const std::string& id,
-        const std::string& email
+        const std::string& email,
+        const RSAKeyPair& keyPair,
+        Certificate* certificate
     );
+
+    ~Operator();
 
     std::string getName() const;
     void setName(const std::string& newName);
@@ -27,6 +37,9 @@ private:
     std::string name;
     std::string id;
     std::string email;
+
+    RSAKeyPair keyPair;
+    Certificate* certificate;
 };
 
 }

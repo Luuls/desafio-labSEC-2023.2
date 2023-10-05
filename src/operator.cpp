@@ -2,11 +2,22 @@
 
 #include <sgc/operator.h>
 
+#include <libcryptosec/certificate/Certificate.h>
+#include <libcryptosec/RSAKeyPair.h>
+
 sgc::Operator::Operator(
     const std::string& name,
     const std::string& id,
-    const std::string& email
-) : name(name), id(id), email(email) {}
+    const std::string& email,
+    const RSAKeyPair& keyPair,
+    Certificate* certificate
+) : name(name), id(id), email(email), keyPair(keyPair), certificate(certificate) {}
+
+sgc::Operator::~Operator() {
+    if (certificate != NULL) {
+        delete certificate;
+    }
+}
 
 std::string sgc::Operator::getName() const { return name; }
 void sgc::Operator::setName(const std::string& newName) { name = newName; }
