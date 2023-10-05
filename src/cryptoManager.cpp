@@ -10,6 +10,7 @@
 #include <libcryptosec/certificate/CertificateRequest.h>
 #include <libcryptosec/certificate/CertificateBuilder.h>
 #include <libcryptosec/certificate/CertPathValidator.h>
+#include <libcryptosec/Signer.h>
 
 sgc::CryptoManager::CryptoManager() {
     MessageDigest md(MessageDigest::SHA256);
@@ -268,7 +269,7 @@ void sgc::CryptoManager::generateKeyPairAndCertificate(const sgc::Operator& op) 
 // @brief Retorna a chave privada presente em ./data/keys/<id hash>.pem.
 // Mas ela retorna um objeto alocado. Portanto, não se esqueça de deletá-lo
 // @return Ponteiro para a chave privada recém alocada
-PrivateKey* sgc::CryptoManager::getPrivateKey() {
+PrivateKey* sgc::CryptoManager::getOpPrivateKey() {
     this->pemManipulator->setInputFilePath("./data/keys/" + this->hashedOpId + ".pem");
 
     std::string pemPrivateKey = this->pemManipulator->getFileContent();
@@ -282,8 +283,36 @@ Certificate sgc::CryptoManager::getOpCertificate() {
     std::string pemOpCert = this->pemManipulator->getFileContent();
     return Certificate(pemOpCert);
 }
+
 Certificate sgc::CryptoManager::getCaCertificate() {
     this->pemManipulator->setInputFilePath("./data/certificates/" + this->hashedCaId + ".pem");
     std::string pemCaCert = this->pemManipulator->getFileContent();
     return Certificate(pemCaCert);
+}
+
+ByteArray sgc::CryptoManager::sign(std::string& message) {
+    MessageDigest md;
+    md.init(MessageDigest::SHA256);
+    ByteArray hashedMessage = md.doFinal(message);
+    Signer signer;
+
+    PrivateKey* opPrivateKey = this->getOpPrivateKey();
+    ByteArray signature = signer.sign(*opPrivateKey, hashedMessage, MessageDigest::SHA256);
+    delete opPrivateKey;
+
+    return signature;
+}
+
+bool sgc::CryptoManager::verify(std::string& message, ByteArray& signature) {
+    MessageDigest md;
+    md.init(MessageDigest::SHA256);
+    ByteArray hashedMessage = md.doFinal(message);
+
+    Signer signer;
+    Certificate opCert = this->getOpCertificate();
+    PublicKey* opPublicKey = opCert.getPublicKey();
+    bool verified = signer.verify(*opPublicKey, signature, hashedMessage, MessageDigest::SHA256);
+    delete opPublicKey;
+
+    return verified;
 }

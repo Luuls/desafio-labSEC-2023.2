@@ -24,7 +24,7 @@ public:
     void setOperator(const sgc::Operator& op);
     void setOpId(const std::string& id);
     
-    PrivateKey* getPrivateKey();
+    PrivateKey* getOpPrivateKey();
     
     Certificate getOpCertificate();
     Certificate getCaCertificate();
@@ -33,6 +33,9 @@ public:
     std::string getHashedCaId() const {
         return this->hashedCaId;
     }
+
+    ByteArray sign(std::string& message);
+    bool verify(std::string& message, ByteArray& signature);
 
     // para uso interno da classe
 private:
