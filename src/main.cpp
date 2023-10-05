@@ -12,8 +12,14 @@
 
 #include <libcryptosec/certificate/CertificateRequest.h>
 #include <libcryptosec/certificate/Certificate.h>
+#include <libcryptosec/certificate/CertPathValidator.h>
 #include <libcryptosec/RSAKeyPair.h>
 #include <libcryptosec/MessageDigest.h>
+
+struct Answer {
+    sgc::Operator op;
+    char answer;
+};
 
 int main(int argc, char** argv) {
     std::string usage = "Uso: " + std::string(argv[0]) + " <caminho do PDF>";
@@ -37,6 +43,7 @@ int main(int argc, char** argv) {
     std::cout << '\n';
 
     std::vector<sgc::Operator> operators;
+    sgc::CryptoManager manager;
     for (int i = 0; i < numOperators; i++) {
         std::cout << "Operador número " << i + 1 << ", insira seus dados\n";
         std::cout << "Nome: ";
@@ -52,29 +59,9 @@ int main(int argc, char** argv) {
         std::cin >> email;
         std::cin.ignore(1, '\n');
 
-        // generate certificate and key pair
-        RSAKeyPair pair(2048);
-        PrivateKey* privateKey = pair.getPrivateKey();
-        std::string pemPrivateKey = privateKey->getPemEncoded();
-        std::string fileDir = "./data/keys/";
-        delete privateKey;
-
-        MessageDigest md(MessageDigest::SHA256);
-        md.init(MessageDigest::SHA256);
-        // ByteArray cpfBytes(cpf);
-        md.update(cpf);
-        std::string hash = md.doFinal().toHex();
-        for (size_t i = 0; i < hash.length(); i++) {
-            hash[i] = std::tolower(hash[i]);
-        }
-
-        std::string filePath = fileDir + hash + ".pem";
-        sgc::PemManipulator pemManipulator(filePath);
-        pemManipulator.writeToFile(pemPrivateKey);
-        // std::cout << pemManipulator.getFileContent() << '\n';
-        // CertificateRequest request(pair.getPublicKey()->getPemEncoded());
-        // request.getPublicKey()->getPemEncoded();
-        operators.push_back(sgc::Operator(name, cpf, email));
+        sgc::Operator op(name, cpf, email);
+        manager.setOperator(op);
+        operators.push_back(op);
     }
 
     std::cout << "Operadores cadastrados:\n";
@@ -94,7 +81,6 @@ int main(int argc, char** argv) {
         MessageDigest md(MessageDigest::SHA256);
         md.init(MessageDigest::SHA256);
         md.update(pdfContent);
-        std::cout << md.doFinal().toHex() << '\n';
     }
 
     catch (const std::runtime_error& e) {
@@ -102,12 +88,23 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::string cpf0 = "12345678910";
-    sgc::CryptoManager manager(cpf0);
-    PrivateKey* privateKey = manager.getPrivateKey();
-    std::cout << privateKey->getPemEncoded() << '\n';
-    delete privateKey;
+    sgc::Operator luan(
+        "Luan Moraes",
+        "13397819997",
+        "luansmoraes13@gmail.com"
+    );
 
-    
+    for (int i = 0; i < operators.size(); i++) {
+        std::string opId = operators[i].getId();
+        manager.setOpId(opId);
+        Certificate opCert = manager.getOpCertificate();
+        Certificate caCert = manager.getCaCertificate();
+
+        std::vector<Certificate> untrustedChain(1, opCert);
+        std::vector<Certificate> trustedChain(1, caCert);
+        CertPathValidator validator(opCert, untrustedChain, trustedChain);
+        std::cout << validator.verify() << '\n';
+    }
+
     return 0;
 }

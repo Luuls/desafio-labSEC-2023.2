@@ -56,6 +56,9 @@ all: $(TARGET)
 run: 
 	@$(TARGET) DOCUMENTO-TESTE.pdf
 
+checkmem:
+	valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt $(TARGET) DOCUMENTO-TESTE.pdf
+
 check:
 	@echo $(OBJS)
 

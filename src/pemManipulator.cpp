@@ -35,13 +35,29 @@ void sgc::PemManipulator::writeToFile(const std::string& content) const {
     file.open(this->outputPath.c_str());
     file.close();
     if (!file.good()) {
-        size_t lastDirSlash = inputPath.rfind('/');
-        std::string dir = inputPath.substr(0, lastDirSlash + 1);
+        size_t lastDirSlash = this->outputPath.rfind('/');
+        std::string dir = this->outputPath.substr(0, lastDirSlash + 1);
         std::system(("mkdir -p " + dir).c_str());
     }
 
-    file.open(this->inputPath.c_str());
+    file.open(this->outputPath.c_str());
     file.write(content.c_str(), content.size());
     file.close();
     return;
+}
+
+void sgc::PemManipulator::setInputFilePath(const std::string& path) {
+    this->inputPath = path;
+}
+
+void sgc::PemManipulator::setOutputFilePath(const std::string& path) {
+    this->outputPath = path;
+}
+
+void sgc::PemManipulator::setFilePaths(
+    const std::string& inputFilePath,
+    const std::string& outputFilePath
+) {
+    this->inputPath = inputFilePath;
+    this->outputPath = outputFilePath; 
 }

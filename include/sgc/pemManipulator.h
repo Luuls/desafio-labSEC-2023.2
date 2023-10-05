@@ -20,6 +20,13 @@ public:
     virtual std::string getFileContent() const;
     virtual void writeToFile(const std::string& content) const;
 
+    void setInputFilePath(const std::string& path);
+    void setOutputFilePath(const std::string& path);
+    void setFilePaths(
+        const std::string& inputFilePath,
+        const std::string& outputFilePath
+    );
+
 private:
     std::string inputPath;
     std::string outputPath;
