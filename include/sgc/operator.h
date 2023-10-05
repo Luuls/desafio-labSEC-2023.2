@@ -2,6 +2,9 @@
 
 #include <string>
 
+#include <libcryptosec/RSAKeyPair.h>
+#include <libcryptosec/certificate/Certificate.h>
+
 namespace sgc {
 
 class Operator {
