@@ -5,3 +5,5 @@ build
 *.o
 data
 *.in
+main.bak
+valgrind-out.txt

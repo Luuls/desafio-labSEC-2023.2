@@ -11,7 +11,7 @@ class ApplicationState;
 
 class Application {
 public:
-    Application(int argc, char* argv[]);
+    Application(int argc, char** argv);
     ~Application();
 
     void run();
@@ -19,11 +19,27 @@ public:
 
     void changeState(ApplicationState* newState);
 
+    int getArgc() const;
+    char** getArgv() const;
+
+    size_t getNumOperators() const;
+    void setNumOperators(size_t numOperators);
+
+    std::vector<Operator&>& getOperators();
+    void addOperator(Operator& op);
+
 private:
     ApplicationState* state;
     bool isRunning;
 
-    std::vector<sgc::Operator> operators;
+    int argc;
+    char** argv;
+
+    // quantidade operadores envolvidos na decisão
+    size_t numOperators;
+    // operadores que foram cadastrados na execução do programa
+    // (não necessariamente a mesma quantidade que numOperators)
+    std::vector<sgc::Operator&> operators;
 };
 
 }
