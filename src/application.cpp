@@ -5,9 +5,7 @@ using namespace sgc;
 
 Application::Application(int argc, char** argv)
     : argc(argc), argv(argv), numOperators(0), operators(), state(NULL) {
-        
-    this->changeState(new InitialState(this));
-
+    
     std::string usage = "Uso: " + std::string(argv[0]) + " <caminho do PDF>";
     if (argc < 2) {
         std::cerr << usage << '\n';
@@ -21,6 +19,9 @@ Application::Application(int argc, char** argv)
         this->setIsRunning(false);
         return;
     }
+
+    this->document = Document(argv[1]);
+    this->changeState(new InitialState(this));
 }
 
 Application::~Application() {
@@ -55,6 +56,22 @@ char** Application::getArgv() const {
     return this->argv;
 }
 
+Document Application::getDocument() {
+    return this->document;
+}
+
+void Application::addSignature(const Signature& signature) {
+    this->document.addSignature(signature);
+}
+
+std::string Application::getDocumentContent() {
+    return this->document.getContent();
+}
+
+std::vector<Signature> Application::getDocumentSignatures() {
+    return this->document.getSignatures();
+}
+
 size_t Application::getNumOperators() const {
     return this->numOperators;
 }
@@ -71,10 +88,10 @@ void Application::addOperator(Operator& op) {
     this->operators.push_back(op);
 }
 
-CertificateAuthority Application::getCa() {
+CertificateAuthority Application::getCertificateAuthority() {
     return this->ca;
 }
 
-void Application::setCa(const CertificateAuthority& ca) {
+void Application::setCertificateAuthority(const CertificateAuthority& ca) {
     this->ca = ca;
 }

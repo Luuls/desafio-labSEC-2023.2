@@ -5,6 +5,7 @@
 
 #include <sgc/operator.h>
 #include <sgc/certificateAuthority.h>
+#include <sgc/document.h>
 
 namespace sgc {
 
@@ -23,14 +24,19 @@ public:
     int getArgc() const;
     char** getArgv() const;
 
+    Document getDocument();
+    void addSignature(const Signature& signature);
+    std::string getDocumentContent();
+    std::vector<Signature> getDocumentSignatures();
+
     size_t getNumOperators() const;
     void setNumOperators(size_t numOperators);
 
     std::vector<Operator> getOperators();
     void addOperator(Operator& op);
 
-    CertificateAuthority getCa();
-    void setCa(const CertificateAuthority& ca);
+    CertificateAuthority getCertificateAuthority();
+    void setCertificateAuthority(const CertificateAuthority& ca);
 
 private:
     bool isRunning;
@@ -38,6 +44,8 @@ private:
     int argc;
     char** argv;
 
+    // documento a ser assinado
+    Document document;
     // quantidade operadores envolvidos na decisão
     size_t numOperators;
     // operadores que foram cadastrados na execução do programa

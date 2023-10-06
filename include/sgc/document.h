@@ -13,6 +13,7 @@ namespace sgc {
 class Document {
 public:
     Document(const std::string& content);
+    Document();
 
     void addSignature(const Signature& signature);
 

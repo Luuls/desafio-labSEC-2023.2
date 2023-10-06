@@ -6,6 +6,8 @@ using namespace sgc;
 
 Document::Document(const std::string& content) : content(content) {}
 
+Document::Document() {}
+
 void Document::addSignature(const Signature& signature) {
     this->signatures.push_back(signature);
 }

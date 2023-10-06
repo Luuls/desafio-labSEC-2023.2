@@ -31,12 +31,12 @@ void CreateOperatorsState::run() {
             name,
             cpf,
             email,
-            app->getCa()
+            app->getCertificateAuthority()
         );
 
         app->addOperator(op);
     }
 
-    app->changeState(new DecisionState(this->getApp()));
+    app->changeState(new DecisionState(app));
     return;
 }

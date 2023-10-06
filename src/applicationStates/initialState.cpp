@@ -20,7 +20,7 @@ void InitialState::run() {
     
     Application* app = this->getApp();
 
-    app->setCa(CertificateAuthority::generateNew());
+    app->setCertificateAuthority(CertificateAuthority::generateNew());
 
     std::cout << "Quantos operadores irão participar desta decisão?\n";
     int numOperators;
@@ -28,7 +28,7 @@ void InitialState::run() {
     std::cin.ignore(1, '\n');
 
     app->setNumOperators(numOperators);
-    app->changeState(new CreateOperatorsState(this->getApp()));
+    app->changeState(new CreateOperatorsState(app));
 
     return;
 }
