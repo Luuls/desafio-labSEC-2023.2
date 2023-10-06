@@ -5,18 +5,20 @@
 
 #include <sgc/PDFReader.h>
 
-sgc::PDFReader::PDFReader(const std::string& path) {
+using namespace sgc;
+
+PDFReader::PDFReader(const std::string& path) {
     document = poppler::document::load_from_file(path);
     if (!document) {
         throw std::runtime_error("Erro ao carregar o arquivo PDF.");
     }
 }
 
-sgc::PDFReader::~PDFReader() {
+PDFReader::~PDFReader() {
     delete document;
 }
 
-std::string sgc::PDFReader::getFileContent() const {
+std::string PDFReader::getFileContent() const {
     // Extrair texto de cada página do PDF
     const int numPages = document->pages();
     std::string content;

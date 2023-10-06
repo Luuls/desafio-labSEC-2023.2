@@ -4,8 +4,8 @@
 
 namespace sgc {
 
-extern const std::string keysDir;
-extern const std::string certificatesDir;
+extern const std::string KEYS_DIR;
+extern const std::string CERTIFICATES_DIR;
 extern const std::string signaturesDir;
 
 }

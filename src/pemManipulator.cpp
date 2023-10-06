@@ -2,17 +2,19 @@
 
 #include <sgc/pemManipulator.h>
 
-sgc::PemManipulator::PemManipulator(const std::string& filePath) :
+using namespace sgc;
+
+PemManipulator::PemManipulator(const std::string& filePath) :
     inputPath(filePath), outputPath(filePath) {}
 
-sgc::PemManipulator::PemManipulator(
+PemManipulator::PemManipulator(
     const std::string& inputFilePath,
     const std::string& outputFilePath
 ) : inputPath(inputFilePath), outputPath(outputFilePath) {}
 
-sgc::PemManipulator::~PemManipulator() {}
+PemManipulator::~PemManipulator() {}
 
-std::string sgc::PemManipulator::getFileContent() const {
+std::string PemManipulator::getFileContent() const {
     std::ifstream file(this->inputPath.c_str());
     if (!file.good()) {
         throw std::runtime_error("Arquivo " + inputPath + " não encontrado.");
@@ -28,7 +30,7 @@ std::string sgc::PemManipulator::getFileContent() const {
     return content;
 }
 
-void sgc::PemManipulator::writeToFile(const std::string& content) const {
+void PemManipulator::writeToFile(const std::string& content) const {
     std::ofstream file;
 
     // verifica se o arquivo existe
@@ -46,15 +48,15 @@ void sgc::PemManipulator::writeToFile(const std::string& content) const {
     return;
 }
 
-void sgc::PemManipulator::setInputFilePath(const std::string& path) {
+void PemManipulator::setInputFilePath(const std::string& path) {
     this->inputPath = path;
 }
 
-void sgc::PemManipulator::setOutputFilePath(const std::string& path) {
+void PemManipulator::setOutputFilePath(const std::string& path) {
     this->outputPath = path;
 }
 
-void sgc::PemManipulator::setFilePaths(
+void PemManipulator::setFilePaths(
     const std::string& inputFilePath,
     const std::string& outputFilePath
 ) {

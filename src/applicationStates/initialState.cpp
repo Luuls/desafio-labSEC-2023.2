@@ -8,15 +8,17 @@
 #include <libcryptosec/Random.h>
 #include <libcryptosec/ByteArray.h>
 
-sgc::InitialState::InitialState(Application* app) : ApplicationState(app) {}
+using namespace sgc;
 
-sgc::InitialState::~InitialState() {}
+InitialState::InitialState(Application* app) : ApplicationState(app) {}
+
+InitialState::~InitialState() {}
 
 // TODO: implementar checagem de sessão existente
-void sgc::InitialState::run() {
+void InitialState::run() {
     MessageDigest::loadMessageDigestAlgorithms();
     
-    sgc::Application* app = this->getApp();
+    Application* app = this->getApp();
 
     app->setCa(CertificateAuthority::generateNew());
     CertificateAuthority ca(app->getCa());

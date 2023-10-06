@@ -1,7 +1,9 @@
 #include <sgc/applicationStates/applicationState.h>
 
-sgc::ApplicationState::ApplicationState(Application* app) : app(app) {}
+using namespace sgc;
 
-sgc::Application* sgc::ApplicationState::getApp() const {
+ApplicationState::ApplicationState(Application* app) : app(app) {}
+
+Application* ApplicationState::getApp() const {
     return this->app;
 }

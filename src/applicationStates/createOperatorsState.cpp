@@ -2,12 +2,14 @@
 #include <sgc/operator.h>
 #include <sgc/operatorBuilder.h>
 
-sgc::CreateOperatorsState::CreateOperatorsState(Application* app) : ApplicationState(app) {}
+using namespace sgc;
 
-sgc::CreateOperatorsState::~CreateOperatorsState() {}
+CreateOperatorsState::CreateOperatorsState(Application* app) : ApplicationState(app) {}
 
-void sgc::CreateOperatorsState::run() {
-    sgc::Application* app = this->getApp();
+CreateOperatorsState::~CreateOperatorsState() {}
+
+void CreateOperatorsState::run() {
+    Application* app = this->getApp();
 
     for (size_t i = 0; i < app->getNumOperators(); i++) {
         std::cout << "Operador número " << i + 1 << ", insira seus dados\n";
@@ -32,13 +34,6 @@ void sgc::CreateOperatorsState::run() {
         );
 
         app->addOperator(op);
-    }
-
-    std::vector<Operator> operators = app->getOperators();
-    for (size_t i = 0; i < operators.size(); i++) {
-        Certificate* currentOpCert = operators[i].getCertificate();
-        std::cout << currentOpCert->getXmlEncoded() << '\n';
-        delete currentOpCert;
     }
 
     app->setIsRunning(false);

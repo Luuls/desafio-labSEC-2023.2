@@ -1,7 +1,9 @@
 #include <sgc/application.h>
 #include <sgc/applicationStates/initialState.h>
 
-sgc::Application::Application(int argc, char** argv)
+using namespace sgc;
+
+Application::Application(int argc, char** argv)
     : argc(argc), argv(argv), numOperators(0), operators(), state(NULL) {
         
     this->changeState(new InitialState(this));
@@ -21,23 +23,23 @@ sgc::Application::Application(int argc, char** argv)
     }
 }
 
-sgc::Application::~Application() {
+Application::~Application() {
     if (this->state != NULL) {
         delete this->state;
     }
 }
 
-void sgc::Application::run() {
+void Application::run() {
     while (this->isRunning) {
         this->state->run();
     }
 }
 
-void sgc::Application::setIsRunning(bool isRunning) {
+void Application::setIsRunning(bool isRunning) {
     this->isRunning = isRunning;
 }
 
-void sgc::Application::changeState(ApplicationState* newState) {
+void Application::changeState(ApplicationState* newState) {
     if (this->state != NULL) {
         delete this->state;
     }
@@ -45,34 +47,34 @@ void sgc::Application::changeState(ApplicationState* newState) {
     this->state = newState;
 }
 
-int sgc::Application::getArgc() const {
+int Application::getArgc() const {
     return this->argc;
 }
 
-char** sgc::Application::getArgv() const {
+char** Application::getArgv() const {
     return this->argv;
 }
 
-size_t sgc::Application::getNumOperators() const {
+size_t Application::getNumOperators() const {
     return this->numOperators;
 }
 
-void sgc::Application::setNumOperators(size_t numOperators) {
+void Application::setNumOperators(size_t numOperators) {
     this->numOperators = numOperators;
 }
 
-std::vector<sgc::Operator> sgc::Application::getOperators() {
+std::vector<Operator> Application::getOperators() {
     return this->operators;
 }
 
-void sgc::Application::addOperator(Operator& op) {
+void Application::addOperator(Operator& op) {
     this->operators.push_back(op);
 }
 
-sgc::CertificateAuthority sgc::Application::getCa() {
+CertificateAuthority Application::getCa() {
     return this->ca;
 }
 
-void sgc::Application::setCa(const CertificateAuthority& ca) {
+void Application::setCa(const CertificateAuthority& ca) {
     this->ca = ca;
 }

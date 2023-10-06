@@ -5,7 +5,9 @@
 #include <libcryptosec/certificate/Certificate.h>
 #include <libcryptosec/RSAKeyPair.h>
 
-sgc::Operator::Operator(const Operator& op) {
+using namespace sgc;
+
+Operator::Operator(const Operator& op) {
     this->name = op.name;
     this->id = op.id;
     this->email = op.email;
@@ -28,7 +30,7 @@ sgc::Operator::Operator(const Operator& op) {
     }
 }
 
-sgc::Operator::Operator(
+Operator::Operator(
     const std::string& name,
     const std::string& id,
     const std::string& email,
@@ -37,34 +39,34 @@ sgc::Operator::Operator(
     Certificate* certificate
 ) : name(name), id(id), email(email), publicKey(publicKey), privateKey(privateKey), certificate(certificate) {}
 
-sgc::Operator::~Operator() {
+Operator::~Operator() {
     delete this->publicKey;
     delete this->privateKey;
     delete this->certificate;
 }
 
-std::string sgc::Operator::getName() const { return name; }
+std::string Operator::getName() const { return name; }
 
-std::string sgc::Operator::getId() const { return id; }
+std::string Operator::getId() const { return id; }
 
-std::string sgc::Operator::getEmail() const { return email; }
+std::string Operator::getEmail() const { return email; }
 
-PublicKey* sgc::Operator::getPublicKey() const {
+PublicKey* Operator::getPublicKey() const {
     std::string pem = this->publicKey->getPemEncoded();
     return new RSAPublicKey(pem);
 }
 
-PrivateKey* sgc::Operator::getPrivateKey() const {
+PrivateKey* Operator::getPrivateKey() const {
     std::string pem = this->privateKey->getPemEncoded();
     return new RSAPrivateKey(pem);
 }
 
-Certificate* sgc::Operator::getCertificate() const {
+Certificate* Operator::getCertificate() const {
     return new Certificate(*this->certificate);
 }
 
 //@brief Print operator's data
-void sgc::Operator::printData() const {
+void Operator::printData() const {
     std::cout << "Nome: " << name << '\n';
     std::cout << "CPF: " << id << '\n';
     std::cout << "E-mail: " << email << '\n';

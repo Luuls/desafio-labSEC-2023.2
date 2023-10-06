@@ -5,10 +5,12 @@
 
 #include <libcryptosec/certificate/CertificateBuilder.h>
 
-sgc::CertificateAuthority::CertificateAuthority()
+using namespace sgc;
+
+CertificateAuthority::CertificateAuthority()
     : privateKey(NULL), publicKey(NULL), certificate(NULL) {}
 
-sgc::CertificateAuthority::CertificateAuthority(const CertificateAuthority& ca) {
+CertificateAuthority::CertificateAuthority(const CertificateAuthority& ca) {
     std::string pem = ca.privateKey->getPemEncoded();
     this->privateKey = new RSAPrivateKey(pem);
 
@@ -18,13 +20,13 @@ sgc::CertificateAuthority::CertificateAuthority(const CertificateAuthority& ca) 
     this->certificate = new Certificate(*ca.certificate);
 }
 
-sgc::CertificateAuthority::CertificateAuthority(
+CertificateAuthority::CertificateAuthority(
     PrivateKey* privateKey,
     PublicKey* publicKey,
     Certificate* certificate
 ) : privateKey(privateKey), publicKey(publicKey), certificate(certificate) {}
 
-sgc::CertificateAuthority::~CertificateAuthority() {
+CertificateAuthority::~CertificateAuthority() {
     if (this->privateKey != NULL) {
         delete this->privateKey;
     }
@@ -38,7 +40,7 @@ sgc::CertificateAuthority::~CertificateAuthority() {
     }
 }
 
-sgc::CertificateAuthority& sgc::CertificateAuthority::operator=(const CertificateAuthority& ca) {
+CertificateAuthority& CertificateAuthority::operator=(const CertificateAuthority& ca) {
     if (this != &ca) {
         delete this->privateKey;
         delete this->publicKey;
@@ -55,9 +57,9 @@ sgc::CertificateAuthority& sgc::CertificateAuthority::operator=(const Certificat
     return *this;
 }
 
-sgc::CertificateAuthority sgc::CertificateAuthority::fromFiles() {}
+CertificateAuthority CertificateAuthority::fromFiles() {}
 
-sgc::CertificateAuthority sgc::CertificateAuthority::generateNew() {
+CertificateAuthority CertificateAuthority::generateNew() {
     std::string caId = "83.899.526/0001-82";
     // CA certificate
     RDNSequence subject;
@@ -98,10 +100,10 @@ sgc::CertificateAuthority sgc::CertificateAuthority::generateNew() {
 
     MessageDigest md(MessageDigest::SHA256);
     md.init(MessageDigest::SHA256);
-    std::string hashedId = sgc::toLowerString(md.doFinal(caId).toHex());
+    std::string hashedId = toLowerString(md.doFinal(caId).toHex());
 
-    std::string caPrivKeyPath = sgc::keysDir + hashedId + ".pem";
-    std::string caCertPath = sgc::certificatesDir + hashedId + ".pem";
+    std::string caPrivKeyPath = KEYS_DIR + hashedId + ".pem";
+    std::string caCertPath = CERTIFICATES_DIR + hashedId + ".pem";
 
     PemManipulator pemManip(caPrivKeyPath);
     pemManip.writeToFile(pemCaPrivKey);
@@ -111,16 +113,16 @@ sgc::CertificateAuthority sgc::CertificateAuthority::generateNew() {
     return CertificateAuthority(caPrivateKey, caPublicKey, caCert);
 }
 
-PrivateKey* sgc::CertificateAuthority::getPrivateKey() const {
+PrivateKey* CertificateAuthority::getPrivateKey() const {
     std::string pem = this->privateKey->getPemEncoded();
     return new RSAPrivateKey(pem);
 }
 
-PublicKey* sgc::CertificateAuthority::getPublicKey() const {
+PublicKey* CertificateAuthority::getPublicKey() const {
     std::string pem = this->publicKey->getPemEncoded();
     return new RSAPublicKey(pem);
 }
 
-Certificate* sgc::CertificateAuthority::getCertificate() const {
+Certificate* CertificateAuthority::getCertificate() const {
     return new Certificate(*(this->certificate));
 }

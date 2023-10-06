@@ -1,3 +1,5 @@
+#pragma once
+
 #include <sgc/operator.h>
 #include <sgc/certificateAuthority.h>
 

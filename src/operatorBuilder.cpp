@@ -6,7 +6,9 @@
 #include <libcryptosec/certificate/CertificateBuilder.h>
 #include <libcryptosec/certificate/Certificate.h>
 
-sgc::Operator sgc::OperatorBuilder::fromFiles(
+using namespace sgc;
+
+Operator OperatorBuilder::fromFiles(
     const std::string& privKeyPath,
     const std::string& certPath
 ) {
@@ -15,7 +17,7 @@ sgc::Operator sgc::OperatorBuilder::fromFiles(
     return Operator("", "", "", NULL, NULL, NULL);
 }
 
-sgc::Operator sgc::OperatorBuilder::generateNew(
+Operator OperatorBuilder::generateNew(
     const std::string& name,
     const std::string& id,
     const std::string& email,
@@ -65,9 +67,9 @@ sgc::Operator sgc::OperatorBuilder::generateNew(
     MessageDigest md(MessageDigest::SHA256);
     md.init(MessageDigest::SHA256);
     std::string idCopy = id;
-    std::string hashedId = sgc::toLowerString(md.doFinal(idCopy).toHex());
-    std::string keyPath = sgc::keysDir + hashedId + ".pem";
-    std::string certPath = sgc::certificatesDir + hashedId + ".pem";
+    std::string hashedId = toLowerString(md.doFinal(idCopy).toHex());
+    std::string keyPath = KEYS_DIR + hashedId + ".pem";
+    std::string certPath = CERTIFICATES_DIR + hashedId + ".pem";
 
     PemManipulator pemManip(keyPath);
     pemManip.writeToFile(pemPrivKey);
