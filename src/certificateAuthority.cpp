@@ -57,8 +57,6 @@ CertificateAuthority& CertificateAuthority::operator=(const CertificateAuthority
     return *this;
 }
 
-CertificateAuthority CertificateAuthority::fromFiles() {}
-
 CertificateAuthority CertificateAuthority::generateNew() {
     std::string caId = "83.899.526/0001-82";
     // CA certificate

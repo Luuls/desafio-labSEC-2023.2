@@ -13,7 +13,6 @@ public:
     CertificateAuthority(const CertificateAuthority& ca);
     ~CertificateAuthority();
     
-    static CertificateAuthority fromFiles();
     static CertificateAuthority generateNew();
 
     // atribuição por cópia
