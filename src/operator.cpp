@@ -65,9 +65,17 @@ Certificate* Operator::getCertificate() const {
     return new Certificate(*this->certificate);
 }
 
-//@brief Print operator's data
-void Operator::printData() const {
-    std::cout << "Nome: " << name << '\n';
-    std::cout << "CPF: " << id << '\n';
-    std::cout << "E-mail: " << email << '\n';
+std::ostream& operator<<(std::ostream& os, const Operator& op) {
+    std::cout << "Nome: " << op.getName() << '\n';
+    std::cout << "CPF: " << op.getId() << '\n';
+    std::cout << "E-mail: " << op.getEmail() << '\n';
+    Certificate* cert = op.getCertificate();
+    std::cout << "Certificado:\n" << cert->getXmlEncoded() << '\n';
+    PublicKey* pubKey = op.getPublicKey();
+    std::cout << "Chave pública:\n" << pubKey->getPemEncoded() << '\n';
+
+    delete cert;
+    delete pubKey;
+
+    return os;
 }

@@ -1,4 +1,5 @@
 #include <sgc/applicationStates/verifyState.h>
+#include <sgc/applicationStates/resultsState.h>
 
 #include <libcryptosec/Signer.h>
 
@@ -58,6 +59,10 @@ void VerifyState::run() {
     ByteArray hashedPdfContent = md.doFinal(pdfContent);
 
     std::vector<Signature> signatures = app->getDocumentSignatures();
+    if (signatures.size() == 0) {
+        std::cout << "[-] Nenhuma assinatura foi encontrada no documento.\n";
+    }
+
     for (size_t i = 0; i < signatures.size(); i++) {
         Signature currentSignature = signatures[i];
         Certificate* currentCert = currentSignature.getSigner();
@@ -88,7 +93,7 @@ void VerifyState::run() {
         delete currentCert;
     }
     // -----------------------------------------------------------------------------------
-
-    app->setIsRunning(false);
+    
+    app->changeState(new ResultsState(app));
     return;
 }

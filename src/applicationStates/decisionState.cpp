@@ -38,7 +38,14 @@ void DecisionState::run() {
         std::cout << currentOp.getName() << " (" << currentOp.getId() << "): ";
         std::cout << "Você é a favor de desligar a UsiNUFSC? (s/n)\n";
         char answer;
-        std::cin >> answer;
+        while (true) {
+            std::cin >> answer;
+            if (answer != 's' && answer != 'n') {
+                std::cout << "Resposta inválida. Digite 's' para SIM ou 'n' para NÃO.\n";
+                continue;
+            }
+            break;
+        }
 
         Answer a = { currentOp, (answer == 's') };
         answers.push_back(a);
@@ -65,12 +72,6 @@ void DecisionState::run() {
         }
 
         std::cout << message << "\n\n";
-    }
-
-    if (yesVotes == 0) {
-        std::cout << "Nenhum operador votou pelo desligamento da UsiNUFSC. A usina continuará ativa.\n";
-        app->setIsRunning(false);
-        return;
     }
 
     app->changeState(new VerifyState(app));

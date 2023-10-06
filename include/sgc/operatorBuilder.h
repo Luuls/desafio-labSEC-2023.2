@@ -8,7 +8,7 @@ namespace sgc {
 class OperatorBuilder {
 public:
     // constroi um operador a partir de um arquivo de chave privada e um de certificado
-    static Operator fromFiles(const std::string& privKeyPath, const std::string& certPath);
+    static Operator fromCertificate(Certificate& cert);
 
     // constroi um operador a partir do nome, id e email e gera
     // um par de chaves e um certificado novos.

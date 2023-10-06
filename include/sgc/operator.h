@@ -31,8 +31,6 @@ public:
 
     Certificate* getCertificate() const;
 
-    void printData() const;
-
 private:
     std::string name;
     std::string id;
@@ -44,3 +42,5 @@ private:
 };
 
 }
+
+std::ostream& operator<<(std::ostream& os, const sgc::Operator& op);

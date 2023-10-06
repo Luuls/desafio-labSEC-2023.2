@@ -8,13 +8,33 @@
 
 using namespace sgc;
 
-Operator OperatorBuilder::fromFiles(
-    const std::string& privKeyPath,
-    const std::string& certPath
-) {
-    // TODO
+Operator OperatorBuilder::fromCertificate(Certificate& cert) {
+    RDNSequence subject(cert.getSubject());
+    std::string name = subject.getEntries(RDNSequence::COMMON_NAME)[0];
+    std::string id = subject.getEntries(RDNSequence::SERIAL_NUMBER)[0];
+    std::string email = subject.getEntries(RDNSequence::EMAIL)[0];
 
-    return Operator("", "", "", NULL, NULL, NULL);
+    MessageDigest md(MessageDigest::SHA256);
+    md.init(MessageDigest::SHA256);
+    std::string hashedId = toLowerString(md.doFinal(id).toHex());
+    std::string privKeyPath = KEYS_DIR + hashedId + ".pem";
+    PemManipulator pemManip(privKeyPath);
+    std::string privKeyPem = pemManip.getFileContent();
+    PrivateKey* privKey = new RSAPrivateKey(privKeyPem);
+    PublicKey* pubKey = cert.getPublicKey();
+
+    Certificate* opCert = new Certificate(cert);
+
+    Operator op(
+        name,
+        id,
+        email,
+        pubKey,
+        privKey,
+        opCert
+    );
+
+    return op;
 }
 
 Operator OperatorBuilder::generateNew(
@@ -58,6 +78,7 @@ Operator OperatorBuilder::generateNew(
     certBuilder.setIssuer(caSubject);
     certBuilder.setNotBefore(notBefore);
     certBuilder.setNotAfter(notAfter);
+    certBuilder.setVersion(3);
 
     Certificate* const cert = certBuilder.sign(*caPrivKey, MessageDigest::SHA256);
 
