@@ -14,11 +14,15 @@ sgc::InitialState::~InitialState() {}
 
 // TODO: implementar checagem de sessão existente
 void sgc::InitialState::run() {
-    sgc::Application* app = this->getApp();
-    // int argc = app->getArgc();
-    // char** argv = app->getArgv();
-
     MessageDigest::loadMessageDigestAlgorithms();
+    
+    sgc::Application* app = this->getApp();
+
+    app->setCa(CertificateAuthority::generateNew());
+    CertificateAuthority ca(app->getCa());
+    Certificate* caCert = ca.getCertificate();
+    std::cout << caCert->getXmlEncoded() << '\n';
+    delete caCert;
 
     std::cout << "Quantos operadores irão participar desta decisão?\n";
     int numOperators;
@@ -27,4 +31,6 @@ void sgc::InitialState::run() {
 
     app->setNumOperators(numOperators);
     app->changeState(new CreateOperatorsState(this->getApp()));
+
+    return;
 }

@@ -4,6 +4,7 @@
 #include <string>
 
 #include <sgc/operator.h>
+#include <sgc/certificateAuthority.h>
 
 namespace sgc {
 
@@ -25,11 +26,13 @@ public:
     size_t getNumOperators() const;
     void setNumOperators(size_t numOperators);
 
-    std::vector<Operator&>& getOperators();
+    std::vector<Operator> getOperators();
     void addOperator(Operator& op);
 
+    CertificateAuthority getCa();
+    void setCa(const CertificateAuthority& ca);
+
 private:
-    ApplicationState* state;
     bool isRunning;
 
     int argc;
@@ -39,7 +42,10 @@ private:
     size_t numOperators;
     // operadores que foram cadastrados na execução do programa
     // (não necessariamente a mesma quantidade que numOperators)
-    std::vector<sgc::Operator&> operators;
+    std::vector<sgc::Operator> operators;
+    CertificateAuthority ca;
+
+    ApplicationState* state;
 };
 
 }

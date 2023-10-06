@@ -9,30 +9,27 @@ namespace sgc {
 
 class Operator {
 public:
-    // Operator(
-    //     const std::string& name,
-    //     const std::string& id,
-    //     const std::string& email
-    // );
-
     Operator(
         const std::string& name,
         const std::string& id,
         const std::string& email,
-        const RSAKeyPair& keyPair,
+        PublicKey* publicKey,
+        PrivateKey* privateKey,
         Certificate* certificate
     );
+
+    Operator(const Operator& op);
 
     ~Operator();
 
     std::string getName() const;
-    void setName(const std::string& newName);
-
     std::string getId() const;
-    void setId(const std::string& newId);
-
     std::string getEmail() const;
-    void setEmail(const std::string& newEmail);
+
+    PublicKey* getPublicKey() const;
+    PrivateKey* getPrivateKey() const;
+
+    Certificate* getCertificate() const;
 
     void printData() const;
 
@@ -41,7 +38,8 @@ private:
     std::string id;
     std::string email;
 
-    RSAKeyPair keyPair;
+    PublicKey* publicKey;
+    PrivateKey* privateKey;
     Certificate* certificate;
 };
 

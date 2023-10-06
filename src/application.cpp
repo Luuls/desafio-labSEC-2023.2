@@ -2,9 +2,9 @@
 #include <sgc/applicationStates/initialState.h>
 
 sgc::Application::Application(int argc, char** argv)
-    : argc(argc), argv(argv), numOperators(0), operators() {
+    : argc(argc), argv(argv), numOperators(0), operators(), state(NULL) {
         
-    this->state = new InitialState(this);
+    this->changeState(new InitialState(this));
 
     std::string usage = "Uso: " + std::string(argv[0]) + " <caminho do PDF>";
     if (argc < 2) {
@@ -61,10 +61,18 @@ void sgc::Application::setNumOperators(size_t numOperators) {
     this->numOperators = numOperators;
 }
 
-std::vector<sgc::Operator&>& sgc::Application::getOperators() {
+std::vector<sgc::Operator> sgc::Application::getOperators() {
     return this->operators;
 }
 
 void sgc::Application::addOperator(Operator& op) {
     this->operators.push_back(op);
+}
+
+sgc::CertificateAuthority sgc::Application::getCa() {
+    return this->ca;
+}
+
+void sgc::Application::setCa(const CertificateAuthority& ca) {
+    this->ca = ca;
 }
