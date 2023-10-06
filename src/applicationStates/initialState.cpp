@@ -21,10 +21,6 @@ void InitialState::run() {
     Application* app = this->getApp();
 
     app->setCa(CertificateAuthority::generateNew());
-    CertificateAuthority ca(app->getCa());
-    Certificate* caCert = ca.getCertificate();
-    std::cout << caCert->getXmlEncoded() << '\n';
-    delete caCert;
 
     std::cout << "Quantos operadores irão participar desta decisão?\n";
     int numOperators;

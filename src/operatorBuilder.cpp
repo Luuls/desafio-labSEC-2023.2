@@ -40,9 +40,9 @@ Operator OperatorBuilder::generateNew(
     KeyUsageExtension keyUsage;
     keyUsage.setUsage(KeyUsageExtension::DIGITAL_SIGNATURE, true);
 
-    // período de duração do presente desafio
-    DateTime notBefore("20230927000000Z");
-    DateTime notAfter("20231006000000Z");
+    // início do presente desafio até o segundo dia no LabSEC
+    DateTime notBefore("2023092700000Z");
+    DateTime notAfter("20231010235959Z");
 
     CertificateRequest certRequest;
     certRequest.setSubject(subject);

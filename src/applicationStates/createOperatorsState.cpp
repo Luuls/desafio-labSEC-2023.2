@@ -1,4 +1,5 @@
 #include <sgc/applicationStates/createOperatorsState.h>
+#include <sgc/applicationStates/decisionState.h>
 #include <sgc/operator.h>
 #include <sgc/operatorBuilder.h>
 
@@ -36,6 +37,6 @@ void CreateOperatorsState::run() {
         app->addOperator(op);
     }
 
-    app->setIsRunning(false);
+    app->changeState(new DecisionState(this->getApp()));
     return;
 }

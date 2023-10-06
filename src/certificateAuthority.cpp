@@ -81,9 +81,9 @@ CertificateAuthority CertificateAuthority::generateNew() {
     keyUsage.setUsage(KeyUsageExtension::KEY_CERT_SIGN, true);
     keyUsage.setUsage(KeyUsageExtension::DIGITAL_SIGNATURE, true);
 
-    // período de duração do presente desafio
+    // início do presente desafio até o segundo dia no LabSEC
     DateTime notBefore("20230927000000Z");
-    DateTime notAfter("20231006000000Z");
+    DateTime notAfter("20231010235959Z");
 
     CertificateBuilder caCertBuilder;
     caCertBuilder.setSubject(subject);
