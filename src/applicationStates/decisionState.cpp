@@ -14,11 +14,6 @@ DecisionState::DecisionState(Application* app) : ApplicationState(app) {}
 
 DecisionState::~DecisionState() {}
 
-struct Answer {
-    Operator& op;
-    bool answer;
-};
-
 void DecisionState::run() {
     Application* app = this->getApp();
 
@@ -29,15 +24,15 @@ void DecisionState::run() {
     ByteArray hashedPdfContent = md.doFinal(pdfContent);
 
     std::vector<Operator> operators = app->getOperators();
-    std::vector<Answer> answers;
     size_t yesVotes = 0;
 
     std::cout << "\n\nAgora, os operadores deverão votar pelo desligamento ou não da Usina Nuclear da UFSC (UsiNUFSC).\n";
     for (size_t i = 0; i < operators.size(); i++) {
         Operator currentOp = operators[i];
         std::cout << currentOp.getName() << " (" << currentOp.getId() << "): ";
-        std::cout << "Você é a favor de desligar a UsiNUFSC? (s/n)\n";
+        std::cout << "Você é a favor do desligamento da UsiNUFSC? (s/n)\n";
         char answer;
+        // Checar se a resposta é válida
         while (true) {
             std::cin >> answer;
             if (answer != 's' && answer != 'n') {
@@ -47,8 +42,6 @@ void DecisionState::run() {
             break;
         }
 
-        Answer a = { currentOp, (answer == 's') };
-        answers.push_back(a);
         std::string message = "Você votou ";
         if (answer == 's') {
             yesVotes++;

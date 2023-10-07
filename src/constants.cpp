@@ -2,4 +2,4 @@
 
 const std::string sgc::KEYS_DIR = "./data/keys/";
 const std::string sgc::CERTIFICATES_DIR = "./data/certificates/";
-const std::string sgc::signaturesDir = "./data/";
+const std::string sgc::SIGNATURES_DIR = "./data/";

@@ -5,9 +5,11 @@
 
 namespace sgc {
 
+// \brief Classe que constroi um operador
 class OperatorBuilder {
 public:
-    // constroi um operador a partir de um arquivo de chave privada e um de certificado
+    // constroi um operador a partir de um certificado
+    // (lê a chave privada do arquivo ./data/keys/<hash do id>.pem)
     static Operator fromCertificate(Certificate& cert);
 
     // constroi um operador a partir do nome, id e email e gera

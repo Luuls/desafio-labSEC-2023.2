@@ -36,6 +36,7 @@ void PemManipulator::writeToFile(const std::string& content) const {
     // verifica se o arquivo existe
     file.open(this->outputPath.c_str());
     file.close();
+    // Se não existir, cria o diretório
     if (!file.good()) {
         size_t lastDirSlash = this->outputPath.rfind('/');
         std::string dir = this->outputPath.substr(0, lastDirSlash + 1);

@@ -7,8 +7,11 @@
 
 namespace sgc {
 
+// \brief Classe para guardar informações de uma assinatura
 class Signature {
 public:
+    // \param signedMessage Mensagem já assinada
+    // \param signer Certificado do assinante
     Signature(ByteArray signedMessage, Certificate* signer);
     Signature(const Signature& signature);
     ~Signature();

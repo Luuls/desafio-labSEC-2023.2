@@ -10,6 +10,7 @@
 
 namespace sgc {
 
+// \brief Classe que representa um documento. Possui assinaturas e conteúdo em string
 class Document {
 public:
     Document(const std::string& content);

@@ -8,6 +8,7 @@
 
 namespace sgc {
 
+// \brief Classe interface para manipulação de arquivos
 class IFileManipulator : public IFileReader, public IFileWriter {
 public:
     virtual ~IFileManipulator() {};

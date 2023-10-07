@@ -16,7 +16,7 @@ CertificateAuthority::CertificateAuthority(const CertificateAuthority& ca) {
 
     pem = ca.publicKey->getPemEncoded();
     this->publicKey = new RSAPublicKey(pem);
-    
+
     this->certificate = new Certificate(*ca.certificate);
 }
 
@@ -27,20 +27,13 @@ CertificateAuthority::CertificateAuthority(
 ) : privateKey(privateKey), publicKey(publicKey), certificate(certificate) {}
 
 CertificateAuthority::~CertificateAuthority() {
-    if (this->privateKey != NULL) {
-        delete this->privateKey;
-    }
-
-    if (this->publicKey != NULL) {
-        delete this->publicKey;
-    }
-
-    if (this->certificate != NULL) {
-        delete this->certificate;
-    }
+    delete this->privateKey;
+    delete this->publicKey;
+    delete this->certificate;
 }
 
 CertificateAuthority& CertificateAuthority::operator=(const CertificateAuthority& ca) {
+    // Prevenção contra autoatribuição
     if (this != &ca) {
         delete this->privateKey;
         delete this->publicKey;
@@ -58,6 +51,8 @@ CertificateAuthority& CertificateAuthority::operator=(const CertificateAuthority
 }
 
 CertificateAuthority CertificateAuthority::generateNew() {
+    // CNPJ hardcoded da UFSC
+    // daria para melhorar.
     std::string caId = "83.899.526/0001-82";
     // CA certificate
     RDNSequence subject;
@@ -84,6 +79,7 @@ CertificateAuthority CertificateAuthority::generateNew() {
     DateTime notAfter("20231010235959Z");
 
     CertificateBuilder caCertBuilder;
+    caCertBuilder.setVersion(3);
     caCertBuilder.setSubject(subject);
     caCertBuilder.setPublicKey(*caPublicKey);
     caCertBuilder.setIssuer(subject);
@@ -103,6 +99,7 @@ CertificateAuthority CertificateAuthority::generateNew() {
     std::string caPrivKeyPath = KEYS_DIR + hashedId + ".pem";
     std::string caCertPath = CERTIFICATES_DIR + hashedId + ".pem";
 
+    // Escrever as informações da AC em arquivos
     PemManipulator pemManip(caPrivKeyPath);
     pemManip.writeToFile(pemCaPrivKey);
     pemManip.setOutputFilePath(caCertPath);

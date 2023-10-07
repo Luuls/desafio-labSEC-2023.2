@@ -4,6 +4,7 @@
 
 namespace sgc {
 
+// Classe base para implementar o padrão de projeto State
 class ApplicationState {
 public:
     ApplicationState(Application* app);

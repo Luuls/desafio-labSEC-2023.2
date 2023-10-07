@@ -7,6 +7,7 @@
 
 namespace sgc {
 
+// \brief Classe para representar os operadores
 class Operator {
 public:
     Operator(
@@ -18,6 +19,7 @@ public:
         Certificate* certificate
     );
 
+    // \brief Construtor de cópia
     Operator(const Operator& op);
 
     ~Operator();
@@ -43,4 +45,8 @@ private:
 
 }
 
+// \brief Sobrecarga para imprimir as informações do operador
+// \param os Stream de saída
+// \param op Operador a ser impresso
+// \return Stream de saída para encadeamento
 std::ostream& operator<<(std::ostream& os, const sgc::Operator& op);

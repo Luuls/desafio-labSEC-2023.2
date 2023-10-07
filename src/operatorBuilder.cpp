@@ -14,6 +14,8 @@ Operator OperatorBuilder::fromCertificate(Certificate& cert) {
     std::string id = subject.getEntries(RDNSequence::SERIAL_NUMBER)[0];
     std::string email = subject.getEntries(RDNSequence::EMAIL)[0];
 
+    // Carrega a chave privada do operador a partir do arquivo nomeado
+    // com o hash do seu id
     MessageDigest md(MessageDigest::SHA256);
     md.init(MessageDigest::SHA256);
     std::string hashedId = toLowerString(md.doFinal(id).toHex());

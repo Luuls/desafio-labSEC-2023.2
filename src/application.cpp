@@ -5,7 +5,8 @@ using namespace sgc;
 
 Application::Application(int argc, char** argv)
     : argc(argc), argv(argv), numOperators(0), operators(), state(NULL) {
-    
+
+    // tratamento da linha de comando
     std::string usage = "Uso: " + std::string(argv[0]) + " <caminho do PDF>";
     if (argc < 2) {
         std::cerr << usage << '\n';
@@ -22,7 +23,9 @@ Application::Application(int argc, char** argv)
 
     this->document = Document(argv[1]);
     this->changeState(new InitialState(this));
+    return;
 }
+
 
 Application::~Application() {
     if (this->state != NULL) {
